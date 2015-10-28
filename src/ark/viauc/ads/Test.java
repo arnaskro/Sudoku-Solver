@@ -23,7 +23,11 @@ public class Test {
 		Board board = new Board();
 		board.insert2dArray(array);
 		
+		System.out.println("\nUnsolved: ");
 		System.out.println(board.toString());
+		
+		System.out.println("Solved: ");
+		System.out.println(Solver.solveBoard(board));
 	}
 
 }
