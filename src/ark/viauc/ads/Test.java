@@ -20,7 +20,10 @@ public class Test {
 				{0, 0, 0,  0, 0, 2,  0, 0, 8}
 		};
 		
-		System.out.println(Sudoku.drawSudoku(array));
+		Board board = new Board();
+		board.insert2dArray(array);
+		
+		System.out.println(board.toString());
 	}
 
 }
