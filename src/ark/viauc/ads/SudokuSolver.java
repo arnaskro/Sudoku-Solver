@@ -31,16 +31,17 @@ public class SudokuSolver
 	private void run()
 	{		
 		printSudoku();
-
 		solve();
 	}
 	
 	
 	private void solve() {
+		System.out.print("Solving... ");
+		
 		emptyCell = getNextEmptyCell(0, 0);
 		
 		if ( !tryPosition( emptyCell[0], emptyCell[1] ) ) {
-			System.out.println("Solution not found!");
+			System.out.println("\nThere is no solution!");
 		}
 	}
 
@@ -49,14 +50,15 @@ public class SudokuSolver
 	{		
 		//System.out.println("Row: " + row + " - Col: " + col);
 			
-		if( row == endRow ) {			
+		if( row == endRow ) {		
+			System.out.println("Done!\n");
 			printSudoku();
 			return true;
 		} else {
 			
 			for (int i = 1 ; i < endRow+1; i++){	// Get new numbers
 		        sudoku[row][col] = i;
-		        if (OK()){ // Check if there is no collisions
+		        if (OK(row, col)){ // Check if there is no collision with this number
 		        	
 		        	emptyCell = getNextEmptyCell(row, col);	// Get next empty cell
 		        	
@@ -66,7 +68,7 @@ public class SudokuSolver
 		        }
 		    }
 			
-		    sudoku[row][col] = 0; // Undo cell;
+		    sudoku[row][col] = 0; // Empty cell;
 		    return false; //Solution not found. Backtrack.			
 		}
 	}
@@ -95,59 +97,68 @@ public class SudokuSolver
 		return position;
 	}
 	
-	private boolean OK() {
+	private boolean OK(int row, int col) {
 		
-		return	checkRows() &&
-				checkCollumns() &&
-				checkBlocks();
+		return	checkRow(row) &&
+				checkColumn(col) &&
+				checkBlock(row-row%3, col-col%3);
 	}
 		
-	private boolean checkRows() {
+	private boolean checkRow(int row) {
 		
 		ArrayList<Integer> list = new ArrayList<>();
 		
-		for (int i = 0; i < endRow; i++) {
-			for (int j = 0; j < endCol; j++) {
-				if (sudoku[i][j] != 0) {
-					if (!list.contains(sudoku[i][j])) {
-						list.add(sudoku[i][j]);
-					} else {
-						return false;
-					}
+		for (int col = 0; col < endRow; col++) {
+			if (sudoku[row][col] != 0)
+				if (list.contains(sudoku[row][col])) {
+					return false;
+				} else {
+					list.add(sudoku[row][col]);
 				}
-			}
-			
-			list.clear(); // Clear list. Prepare for next row 
 		}
 		
 		return true;
 	}
 
 
-	private boolean checkCollumns() {
+	private boolean checkColumn(int col) {
 		
 		ArrayList<Integer> list = new ArrayList<>();
 		
-		for (int i = 0; i < endCol; i++) {
-			for (int j = 0; j < endRow; j++) {
-				if (sudoku[j][i] != 0) {
-					if (!list.contains(sudoku[j][i])) {
-						list.add(sudoku[j][i]);
-					} else {
-						return false;
-					}
+		for (int row = 0; row < endCol; row++) {
+			if (sudoku[row][col] != 0)
+				if (list.contains(sudoku[row][col])) {
+					return false;
+				} else {
+					list.add(sudoku[row][col]);
 				}
-			}
-			
-			list.clear(); // Clear list. Prepare for next row 
 		}
 		
 		return true;
 	}
 
 
-	private boolean checkBlocks() {
-		// TODO Auto-generated method stub
+	private boolean checkBlock(int blockRowStart, int blockColStart) {
+		
+		ArrayList<Integer> list = new ArrayList<>();
+		int row = 0;
+		int col = 0;
+		
+		for (int i = 0; i < 3; i++) {
+			row = i + blockRowStart;
+			
+			for (int j = 0; j < 3; j++) {
+				col = j + blockColStart;
+				
+				if (sudoku[row][col] != 0)
+					if (list.contains(sudoku[row][col])) {
+						return false;
+					} else {
+						list.add(sudoku[row][col]);
+					}
+			}
+		}
+		
 		return true;
 	}
 
