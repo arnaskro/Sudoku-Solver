@@ -1,14 +1,22 @@
+/**
+ * @title	Sudoku solver
+ * @author	Arnas Kromelis
+ * @date	10/29/2015
+ * description	Solves a sudoku array using backtracking algorithm
+ */
 package ark.viauc.ads;
 
 import java.util.ArrayList;
 
 public class SudokuSolver
 {
+	
 	public static void main( String[] args )
 	{
 		new SudokuSolver().run();
 	}
 			
+	
 	private int[][] sudoku = 
 		{
 				{8, 0, 0,  7, 0, 0,  0, 0, 0},
@@ -34,7 +42,6 @@ public class SudokuSolver
 		solve();
 	}
 	
-	
 	private void solve() {
 		System.out.print("Solving... ");
 		
@@ -45,20 +52,19 @@ public class SudokuSolver
 		}
 	}
 
-
 	private boolean tryPosition( int row, int col )
 	{		
 		//System.out.println("Row: " + row + " - Col: " + col);
 			
-		if( row == endRow ) {		
+		if( row == endRow ) {	// if its the last row 	
 			System.out.println("Done!\n");
 			printSudoku();
-			return true;
-		} else {
+			return true;	// Finished
+		} else {	// if its not the last row
 			
-			for (int i = 1 ; i < endRow+1; i++){	// Get new numbers
-		        sudoku[row][col] = i;
-		        if (OK(row, col)){ // Check if there is no collision with this number
+			for (int i = 1 ; i <= endRow; i++){	// Get new numbers from 1..9
+		        sudoku[row][col] = i;	// place the number in the position
+		        if (OK(row, col)){ // Check if the number is OK in the position
 		        	
 		        	emptyCell = getNextEmptyCell(row, col);	// Get next empty cell
 		        	
@@ -68,8 +74,8 @@ public class SudokuSolver
 		        }
 		    }
 			
-		    sudoku[row][col] = 0; // Empty cell;
-		    return false; //Solution not found. Backtrack.			
+		    sudoku[row][col] = 0; // Empty cell
+		    return false; // There is no solution	
 		}
 	}
 	
@@ -97,13 +103,17 @@ public class SudokuSolver
 		return position;
 	}
 	
+	
+	/*
+	 * check if row, column and block doesn't have collisions
+	 */
 	private boolean OK(int row, int col) {
 		
 		return	checkRow(row) &&
 				checkColumn(col) &&
 				checkBlock(row-row%3, col-col%3);
 	}
-		
+	
 	private boolean checkRow(int row) {
 		
 		ArrayList<Integer> list = new ArrayList<>();
