@@ -4,7 +4,7 @@
  * @date	10/29/2015
  * description	Solves a sudoku array using backtracking algorithm
  */
-package ark.viauc.ads;
+package ark.viauc.ads.sudoku;
 
 import java.util.ArrayList;
 
@@ -15,9 +15,11 @@ public class SudokuSolver
 	{
 		new SudokuSolver().run();
 	}
-			
+
+	private int[][] sudoku = new int[9][9];
 	
-	private int[][] sudoku = 
+	// Easy
+	private int[][] easy = 
 		{
 				{8, 0, 0,  7, 0, 0,  0, 0, 0},
 				{0, 0, 9,  0, 4, 0,  7, 0, 1},
@@ -32,12 +34,48 @@ public class SudokuSolver
 				{0, 0, 0,  0, 0, 2,  0, 0, 8}
 		};
 	
+	// Hard
+	private int[][] hard = 
+		{
+				{8, 0, 0,  0, 0, 0,  0, 0, 0},
+				{0, 0, 3,  6, 0, 0,  0, 0, 0},
+				{0, 7, 0,  0, 9, 0,  2, 0, 0},
+				
+				{0, 5, 0,  0, 0, 7,  0, 0, 0},
+				{0, 0, 0,  0, 4, 5,  7, 0, 0},
+				{0, 0, 0,  1, 0, 0,  0, 3, 0},
+				
+				{0, 0, 1,  0, 0, 0,  0, 6, 8},
+				{0, 0, 8,  5, 0, 0,  0, 1, 0},
+				{0, 9, 0,  0, 0, 0,  4, 0, 0}
+		};
+	
+	// Impossible
+	private int[][] impossible = 
+		{
+				{8, 0, 0,  0, 0, 0,  0, 0, 0},
+				{0, 0, 3,  6, 0, 0,  0, 0, 0},
+				{0, 7, 0,  0, 9, 0,  2, 0, 0},
+				
+				{0, 5, 0,  0, 0, 7,  0, 0, 0},
+				{0, 0, 0,  0, 4, 5,  7, 0, 0},
+				{0, 0, 0,  1, 0, 0,  0, 3, 0},
+				
+				{0, 0, 1,  0, 0, 0,  0, 6, 8},
+				{0, 0, 8,  5, 0, 0,  0, 1, 0},
+				{0, 9, 0,  0, 0, 0,  4, 6, 0}
+		};
+	
 	private int endRow = sudoku.length;
 	private int endCol = sudoku[endRow-1].length;
-	private int[] emptyCell;	
+	private int[] emptyCell = {0, 0};	
 	
 	private void run()
 	{		
+		//sudoku = easy;
+		sudoku = hard;
+		//sudoku = impossible;
+		
 		printSudoku();
 		solve();
 	}
@@ -45,7 +83,8 @@ public class SudokuSolver
 	private void solve() {
 		System.out.print("Solving... ");
 		
-		emptyCell = getNextEmptyCell(0, 0);
+		if (sudoku[0][0] != 0)
+			emptyCell = getNextEmptyCell(0, 0);
 		
 		if ( !tryPosition( emptyCell[0], emptyCell[1] ) ) {
 			System.out.println("\nThere is no solution!");
